@@ -9,8 +9,14 @@ import {
 import React from "react";
 import tw from "twrnc";
 import { Icon } from "@rneui/base";
+import { useNavigation } from "@react-navigation/native";
 
-const data = [
+const data: {
+  id: string;
+  title: string;
+  image: string;
+  screen: string;
+}[] = [
   {
     id: "123",
     title: "Get a ride",
@@ -26,25 +32,36 @@ const data = [
 ];
 
 export default function NavOptions() {
+  const navigation = useNavigation();
+
   return (
     <FlatList
       horizontal
       keyExtractor={(item) => item.id}
       data={data}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={tw` flex flex-col items-center justify-center pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40 h-65`}
-        >
-          <View>
-            <Image
-              style={{ width: 120, height: 120, resizeMode: "contain" }}
-              source={{ uri: item.image }}
-            />
-            <Text style={tw`mt-2 text-lg font-semibold`}>{item.title}</Text>
-            <Icon style={tw`p-2 bg-black rounded-full w-10 mt-4`} type='antdesign' color={"white"} name='arrowright' />
-          </View>
-        </TouchableOpacity>
-      )}
+      renderItem={({ item }) => {
+        const { image, screen, title } = item;
+        return (
+          <TouchableOpacity
+            onPress={() => navigation.navigate(screen)}
+            style={tw` flex flex-col items-center justify-center pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40 h-65`}
+          >
+            <View>
+              <Image
+                style={{ width: 120, height: 120, resizeMode: "contain" }}
+                source={{ uri: image }}
+              />
+              <Text style={tw`mt-2 text-lg font-semibold`}>{title}</Text>
+              <Icon
+                style={tw`p-2 bg-black rounded-full w-10 mt-4`}
+                type='antdesign'
+                color='white'
+                name='arrowright'
+              />
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 }
